@@ -1,0 +1,151 @@
+x = input("which document do you want to edit? ")
+zz = 0
+while zz != 1:
+    try:
+        file = open(x, 'r+')
+        zz = 1
+    except IOError:
+        print("No such file", x)
+        x = input("try again:")
+main_str = file.read()
+def rotation(main_str):
+    angle = input("""whe rotation would you like?
+     0 - no change, 90 - quarter turn to the right, 180 - reverse, 270 - quarter turn to the left or 360 for a mirror image.""")
+    if angle == "0":
+        pass
+    elif angle == "360":
+        main_str = main_str[::-1]
+        return main_str
+    elif angle == "180":
+        main_str = main_str.splitlines()
+        list = main_str[::-1]
+        main_str = ""
+        for i in list:
+            main_str += i + "\n"
+        return main_str
+    elif angle == "90":
+        main_str = main_str.splitlines()
+        list = main_str[::-1]
+        highest_length = 0
+        new_list = ""
+        for i in list:
+            if len(i) > highest_length:
+                highest_length = len(i)
+        for i in list:
+            if len(i) != highest_length:
+                i += " " * (highest_length - len(i))
+        for i in range(highest_length):
+            for j in list:
+                new_list += j[i:i+1]
+            new_list += "\n"
+        return new_list
+    elif angle == "90":
+        main_str = main_str.splitlines()
+        list = main_str[::-1]
+        highest_length = 0
+        new_list = ""
+        for i in list:
+            if len(i) > highest_length:
+                highest_length = len(i)
+        for i in list:
+            if len(i) != highest_length:
+                i += " " * (highest_length - len(i))
+        for i in range(highest_length):
+            for j in list:
+                new_list += j[i:i + 1]
+            new_list += "\n"
+        return new_list
+    elif angle == "270":
+        main_str = main_str.splitlines()
+        highest_length = 0
+        new_list = ""
+        for i in main_str:
+            if len(i) > highest_length:
+                highest_length = len(i)
+        for i in main_str:
+            if len(i) != highest_length:
+                i += " " * (highest_length - len(i))
+        for i in range(highest_length):
+            for j in main_str:
+                new_list += j[len(j)-i-1: len(j) - i]
+            new_list += "\n"
+        return new_list
+def serialize_ASCII(main_str):
+    new_str = ""
+    count = 1
+    chr = ""
+    list = main_str.splitlines()
+    for z in list:
+        for i in z:
+            if i == chr:
+                count += 1
+            else:
+                new_str += str(count) + i
+                chr = i
+                count = 2
+        new_str += "\n"
+    return new_str
+def deserialize_ASCII(main_str):
+    new_str = ""
+    list = main_str.splitlines()
+    number = "0"
+    for line in list:
+        for i in line:
+            try:
+                int(i)
+                number += i
+            except ValueError:
+                new_str += int(number) * i
+                number = "0"
+        new_str +="\n"
+    return new_str
+def s_or_d():
+    s_or_d=""
+    while s_or_d != "deserialize" and s_or_d != "serialize":
+        s_or_d = input("do you want to serialize or deserialize? ")
+        if s_or_d == "serialize":
+            return serialize_ASCII(main_str)
+        elif s_or_d == "deserialize":
+            return deserialize_ASCII(main_str)
+        else:
+            print("you have to choose one of the options (try check your spelling all the letters are low cup)")
+def change_by_dict(main_str):
+    dict1 = {")" : "^", "$" : ";", "*" : "|"}
+    dict2 = {")" : "$" , "$" : "!", "*" : "o"}
+    num = input("0,1 or 2 ? ")
+    while num != "0" and num != "1" and num != "2":
+        num = input("you must choose 0,1 or 2!!! ")
+    if num == "0":
+        pass
+    else:
+        main_str = main_str.splitlines()
+        if num == "1":
+            new_str = ''
+            for j in main_str:
+                for i in j:
+                   if i in dict1:
+                       new_str += dict1[i]
+                       main_str = main_str
+                   else:
+                       new_str += "x"
+                       main_str = main_str
+                new_str += "\n"
+            main_str = new_str
+        else:
+            new_str = ''
+            for j in main_str:
+                for i in j:
+                    if i in dict1:
+                        new_str += dict2[i]
+                        main_str = main_str
+                    else:
+                        new_str += "x"
+                        main_str = main_str
+                new_str += "\n"
+            main_str = new_str
+    return main_str
+end_str = s_or_d()
+end_str = change_by_dict(main_str)
+end_str = rotation(main_str)
+finished_file = open("complited.txt", 'w')
+finished_file.write(str(end_str))
