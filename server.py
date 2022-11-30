@@ -1,18 +1,23 @@
-import socket
-from map_code import map
-map1 = 'files/icehockey.bin'
+import  socket
+from main import game
+serv = socket.socket()
 port = 12345
-soc = socket.socket()
-soc.bind(('', port))
-soc.listen(5)
+serv.bind(('', port))
+serv.listen(5)
 while True:
-    c, addr = soc.accept()
-    current_map = map(map1)
-    while True:
-        order = c.recv(128).decode()
-        if order == 'STATUS':
-             c.send(current_map.one_step_away().encode())
+    c, addr = serv.accept()
+    tsofen = game()
+    global result
+    for i in range(10):
+        guess = c.recv(1024).decode()
+        result = str(tsofen.check(guess))
+        if result == "["B", "B", "B", "B"]":
+            result = "Congratulations, you won"
+            c.send(result.encode())
+            serv.close()
+            break
         else:
-            side = order[5:]
-            c.send(map.move(side).encode())
-            current_map.cop_random_move()
+            c.send(result.encode())
+    c.send("you lost :(, maybe next time you'll win".encode())
+    serv.close()
+    break
