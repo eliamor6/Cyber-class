@@ -1,0 +1,23 @@
+import  socket
+from main import game
+serv = socket.socket()
+port = 12345
+serv.bind(('', port))
+serv.listen(5)
+while True:
+    c, addr = serv.accept()
+    tsofen = game()
+    global result
+    for i in range(10):
+        guess = c.recv(1024).decode()
+        result = str(tsofen.check(guess))
+        if result == "["B", "B", "B", "B"]":
+            result = "Congratulations, you won"
+            c.send(result.encode())
+            serv.close()
+            break
+        else:
+            c.send(result.encode())
+    c.send("you lost :(, maybe next time you'll win".encode())
+    serv.close()
+    break
