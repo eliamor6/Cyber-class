@@ -1,0 +1,25 @@
+import random
+import socket
+from flask import Flask, request
+
+app = Flask(__name__)
+
+@app.route("/port", methods=["GET"])
+def get_port():
+    port = random.randint(1024, 65535)
+    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    sock.bind(('', port))
+
+    while True:
+        data, addr = sock.recvfrom(1024)
+        message = data.decode()
+        if message == "Cyber Himmelfarb":
+            sock.sendto(b"Victory!", addr)
+            break
+        else:
+            sock.sendto(b"No Entry", addr)
+    sock.close()
+    return "", 200, {'Port Number': str(port)}
+
+if __name__ == "__main__":
+    app.run()
