@@ -1,0 +1,28 @@
+import random
+import threading
+def calculate_pi(num_attempts):
+    count = 0
+    total_count = 0
+    total_num_attempts = 0
+    for i in range(num_attempts):
+        x = random.random()
+        y = random.random()
+        if x**2 + y**2 < 1:
+            count += 1
+    total_count = total_count + count
+    total_num_attempts = total_num_attempts +num_attempts
+    return 4 * total_count / total_num_attempts
+
+def run_computation(num_batches, num_attempts_per_batch):
+    counter = 0
+    for i in range(num_batches):
+        pi_estimate = calculate_pi(num_attempts_per_batch)
+        print("Real value of pi: 3.141592653589793")
+        print("Calculated value of pi:" , pi_estimate )
+        print("Number of attempts:" , num_attempts_per_batch * counter)
+        print('---')
+        counter += 1
+
+num_batches = int(input('Enter the number of batches: '))
+num_attempts_per_batch = 1000000
+run_computation(num_batches, num_attempts_per_batch)
